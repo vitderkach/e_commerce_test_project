@@ -3,9 +3,17 @@ import 'package:flutter/services.dart';
 import 'core/flavor/flavor_config.dart';
 import 'core/tenant/tenant_config.dart';
 import 'core/theme/app_theme_extension.dart';
+import 'core/di/injection.dart';
+import 'presentation/pages/payment_page.dart';
+import 'core/security/security_service.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Injection.init();
+
+  // Request notification permission on app start (Android 13+)
+  getIt<SecurityService>().requestNotificationPermission();
 
   // In Flutter 3.16+, appFlavor from services.dart provides the flavor
   // passed via the --flavor flag during build/run.
@@ -53,6 +61,19 @@ class TenantHomePage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const TenantBrandedWidget(),
+            const SizedBox(height: 40),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const PaymentPage()),
+                );
+              },
+              icon: const Icon(Icons.payment),
+              label: const Text('Go to Payment'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              ),
+            ),
           ],
         ),
       ),

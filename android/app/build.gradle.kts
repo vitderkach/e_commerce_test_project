@@ -30,6 +30,20 @@ android {
         versionName = flutter.versionName
     }
 
+    flavorDimensions += "mode"
+    productFlavors {
+        create("retail_shop") {
+            dimension = "mode"
+            applicationIdSuffix = ".retail"
+            versionNameSuffix = "-retail"
+        }
+        create("utility_pay") {
+            dimension = "mode"
+            applicationIdSuffix = ".utility"
+            versionNameSuffix = "-utility"
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
@@ -41,4 +55,9 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("androidx.core:core-ktx:1.12.0")
 }
