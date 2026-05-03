@@ -1,155 +1,94 @@
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
-class SecurityScannerAnimation extends StatefulWidget {
-  final Color color;
-  final double size;
+class SecurityScanner extends StatefulWidget {
+const SecurityScanner({super.key});
 
-  const SecurityScannerAnimation({
-    super.key,
-    required this.color,
-    this.size = 200,
-  });
-
-  @override
-  State<SecurityScannerAnimation> createState() => _SecurityScannerAnimationState();
+@override
+State<SecurityScanner> createState() => _SecurityScannerState();
 }
 
-class _SecurityScannerAnimationState extends State<SecurityScannerAnimation>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+class _SecurityScannerState extends State<SecurityScanner> with SingleTickerProviderStateMixin {
+late AnimationController _controller;
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 4),
-    )..repeat();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _controller,
-      builder: (context, child) {
-        return CustomPaint(
-          size: Size(widget.size, widget.size),
-          painter: ScannerPainter(
-            progress: _controller.value,
-            color: widget.color,
-          ),
-        );
-      },
-    );
-  }
+@override
+void initState() {
+super.initState();
+_controller = AnimationController(
+vsync: this,
+duration: const Duration(seconds: 3),
+)..repeat();
 }
 
-class ScannerPainter extends CustomPainter {
-  final double progress;
-  final Color color;
+@override
+void dispose() {
+_controller.dispose();
+super.dispose();
+}
 
-  ScannerPainter({required this.progress, required this.color});
+@override
+Widget build(BuildContext context) {
+return RepaintBoundary( // Критично для FPS
+child: CustomPaint(
+size: const Size(300, 300),
+painter: RadarPainter(animationValue: _controller),
+),
+);
+}
+}
+
+class RadarPainter extends CustomPainter {
+  final Animation<double> animationValue;
+
+  // Кэшируем Paint, чтобы не создавать объекты в методе paint (каждые 8мс)
+  final Paint _gridPaint = Paint()
+    ..color = Colors.green.withOpacity(0.2)
+    ..style = PaintingStyle.stroke
+    ..strokeWidth = 1.0;
+
+  final Paint _radarPaint = Paint()..style = PaintingStyle.fill;
+
+  RadarPainter({required this.animationValue}) : super(repaint: animationValue);
 
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
-    final radius = math.min(size.width, size.height) / 2;
+    final radius = size.width / 2;
 
-    final bgPaint = Paint()
-      ..color = color.withOpacity(0.1)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.0;
-
-    // Draw static concentric circles
+    // 1. Отрисовка сетки (статичная часть)
     for (var i = 1; i <= 4; i++) {
-      canvas.drawCircle(center, radius * (i / 4), bgPaint);
+      canvas.drawCircle(center, radius * (i / 4), _gridPaint);
     }
 
-    // Draw pulsating waves (Sine based)
-    final wavePaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0;
+    // 2. Математика сканера (Sweep Gradient)
+    final sweepAngle = animationValue.value * 2 * math.pi;
 
-    for (var i = 0; i < 3; i++) {
-      final waveProgress = (progress + (i * 0.33)) % 1.0;
-      final waveRadius = radius * waveProgress;
-      final opacity = (1.0 - waveProgress).clamp(0.0, 1.0);
-      
-      wavePaint.color = color.withOpacity(opacity * 0.5);
-      canvas.drawCircle(center, waveRadius, wavePaint);
-    }
+    _radarPaint.shader = SweepGradient(
+      center: Alignment.center,
+      startAngle: 0.0,
+      endAngle: math.pi * 2,
+      colors: [
+        Colors.green.withOpacity(0.0),
+        Colors.green.withOpacity(0.5),
+      ],
+      stops: const [0.75, 1.0],
+      transform: GradientRotation(sweepAngle - math.pi / 2),
+    ).createShader(Rect.fromCircle(center: center, radius: radius));
 
-    // Draw Rotating Radar Sweep (Math heavy gradient)
-    final sweepAngle = progress * 2 * math.pi;
-    final sweepPaint = Paint()
-      ..shader = SweepGradient(
-        center: Alignment.center,
-        startAngle: sweepAngle - (math.pi / 2),
-        endAngle: sweepAngle,
-        colors: [
-          color.withOpacity(0.0),
-          color.withOpacity(0.5),
-        ],
-        stops: const [0.75, 1.0],
-      ).createShader(Rect.fromCircle(center: center, radius: radius));
+    canvas.drawCircle(center, radius, _radarPaint);
 
-    canvas.save();
-    canvas.translate(center.dx, center.dy);
-    canvas.rotate(-math.pi / 2); // Start from top
-    canvas.translate(-center.dx, -center.dy);
-    canvas.drawCircle(center, radius, sweepPaint);
-    canvas.restore();
+    // 3. Акцентная линия (луч)
+    final dx = center.dx + radius * math.cos(sweepAngle - math.pi / 2);
+    final dy = center.dy + radius * math.sin(sweepAngle - math.pi / 2);
 
-    // Draw scanning "data" points (Sine wave movement)
-    final pointPaint = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-
-    for (var i = 0; i < 8; i++) {
-      final angle = (i * math.pi / 4) + (progress * math.pi * 0.5);
-      final distanceFactor = 0.5 + 0.3 * math.sin(progress * 2 * math.pi + i);
-      final pointOffset = Offset(
-        center.dx + math.cos(angle) * radius * distanceFactor,
-        center.dy + math.sin(angle) * radius * distanceFactor,
-      );
-      
-      final pointSize = 2.0 + 2.0 * math.sin(progress * 4 * math.pi + i);
-      canvas.drawCircle(pointOffset, pointSize, pointPaint);
-    }
-    
-    // Draw the "active" scanning line (Moving sine wave across the circle)
-    final scanLineY = center.dy - radius + (radius * 2 * progress);
-    final linePaint = Paint()
-      ..color = color.withOpacity(0.3)
-      ..strokeWidth = 2.0
-      ..style = PaintingStyle.stroke;
-
-    final path = Path();
-    for (double x = center.dx - radius; x <= center.dx + radius; x += 2) {
-      // Calculate if the point is inside the circle
-      final dx = x - center.dx;
-      final maxY = math.sqrt(math.max(0, radius * radius - dx * dx));
-      
-      if ((scanLineY - center.dy).abs() <= maxY) {
-        final sineOffset = 5 * math.sin((x / radius * 10) + (progress * 2 * math.pi));
-        if (x == center.dx - radius) {
-          path.moveTo(x, scanLineY + sineOffset);
-        } else {
-          path.lineTo(x, scanLineY + sineOffset);
-        }
-      }
-    }
-    //canvas.drawPath(path, linePaint);
+    canvas.drawLine(
+        center,
+        Offset(dx, dy),
+        _gridPaint..color = Colors.green.withOpacity(0.8)..strokeWidth = 2.0
+    );
   }
 
   @override
-  bool shouldRepaint(covariant ScannerPainter oldDelegate) => true;
+  bool shouldRepaint(RadarPainter oldDelegate) => false; // Используем Animation в конструкторе
 }

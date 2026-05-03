@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:statsfl/statsfl.dart';
 import '../../core/theme/app_theme_extension.dart';
 import '../../core/di/injection.dart';
 import '../../core/security/security_service.dart';
@@ -71,11 +72,6 @@ class _PaymentPageState extends State<PaymentPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SecurityScannerAnimation(
-                color: themeExt.primaryColor,
-                size: 150,
-              ),
-              const SizedBox(height: 24),
               Text(
                 'Complete your purchase',
                 style: Theme.of(context).textTheme.headlineSmall,
@@ -95,6 +91,12 @@ class _PaymentPageState extends State<PaymentPage> {
               label: 'Bank Transfer',
               themeExt: themeExt,
             ),
+            const SizedBox(height: 32),
+            StatsFl(child:
+            SecurityScanner(
+              //color: themeExt.primaryColor,
+              //size: 150,
+            ),),
             const SizedBox(height: 32),
             OutlinedButton.icon(
               onPressed: () {
