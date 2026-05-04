@@ -113,7 +113,7 @@ class _PaymentPageState extends State<PaymentPage> with PageConfigMixin<PaymentP
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Payment Is In Progress'),
-        content: const Text('Your transaction is being processed securely.'),
+        content: const Text('Your transaction is being processed securely.\nCheck the status in the notification panel.'),
         actions: [
           TextButton(
             onPressed: () {
