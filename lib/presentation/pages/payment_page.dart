@@ -86,21 +86,6 @@ class _PaymentPageState extends State<PaymentPage> with PageConfigMixin<PaymentP
             if (_cachedPaymentBanner != null) _cachedPaymentBanner!,
 
             SizedBox(height: pageConfig.bannerSpacing),
-            OutlinedButton.icon(
-              onPressed: () {
-                getIt<PaymentService>().startPayment();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Processing payment in background... Check notifications.')),
-                );
-              },
-              icon: const Icon(Icons.shopping_bag),
-              label: const Text('Buy Mock Item (Foreground Service)'),
-              style: OutlinedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                side: BorderSide(color: themeExt.primaryColor),
-              ),
-            ),
-            const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () => _checkSecurityAndPay(context, themeExt),
               style: ElevatedButton.styleFrom(
@@ -123,11 +108,12 @@ class _PaymentPageState extends State<PaymentPage> with PageConfigMixin<PaymentP
   }
 
   void _processPayment(BuildContext context, AppThemeExtension themeExt) {
+    getIt<PaymentService>().startPayment();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Payment Successful'),
-        content: const Text('Your transaction has been processed securely.'),
+        title: const Text('Payment Is In Progress'),
+        content: const Text('Your transaction is being processed securely.'),
         actions: [
           TextButton(
             onPressed: () {

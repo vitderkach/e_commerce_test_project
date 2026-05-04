@@ -24,9 +24,6 @@ class AndroidNotificationService implements NotificationService {
   }
 
   @override
-  Stream<void> get onPaymentFinished => _onPaymentFinishedController.stream;
-
-  @override
   Future<void> requestNotificationPermission() async {
     try {
       await _channel.invokeMethod('requestNotificationPermission');

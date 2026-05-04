@@ -17,8 +17,4 @@ class IOSSecurityService implements SecurityService {
   Future<void> setSecureFlag(bool enable) async {
     // TODO: Implement iOS side (e.g. prevent screen recording/screenshots if possible)
   }
-
-  @override
-  // TODO: implement securityEvents
-  Stream<Map<String, dynamic>> get securityEvents => Stream.fromIterable([]);
 }
