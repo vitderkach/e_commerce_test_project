@@ -10,11 +10,13 @@ import 'core/security/security_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  FlavorConfig.initialize(appFlavor);
+
   await Injection.init();
 
   getIt<SecurityService>().requestNotificationPermission();
 
-  FlavorConfig.initialize(appFlavor);
+
 
   runApp(const MultiTenantApp());
 }

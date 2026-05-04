@@ -4,6 +4,7 @@ import '../../core/di/injection.dart';
 import '../../core/security/security_service.dart';
 import '../../core/flavor/flavor_config.dart';
 import '../../core/flavor/app_flavor.dart';
+import '../factories/payment_widget_factory.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
@@ -13,16 +14,25 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
+  Widget? _cachedPaymentBanner;
+
   @override
   void initState() {
     super.initState();
-    // Enable secure flag when entering the payment page
     getIt<SecurityService>().setSecureFlag(true);
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_cachedPaymentBanner == null) {
+      final themeExt = Theme.of(context).extension<AppThemeExtension>()!;
+      _cachedPaymentBanner = getIt<PaymentWidgetFactory>().buildPaymentBanner(context, themeExt);
+    }
+  }
+
+  @override
   void dispose() {
-    // Disable secure flag when leaving the payment page
     getIt<SecurityService>().setSecureFlag(false);
     super.dispose();
   }
@@ -79,10 +89,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 textAlign: TextAlign.center,
               ),
             SizedBox(height: isUtility ? 24 : 40),
-              if (FlavorConfig.instance.flavor == AppFlavor.retailShop)
-                _buildPromoBanner(context, themeExt),
-              if (isUtility)
-                _buildBillBreakdown(context, themeExt),
+            if (_cachedPaymentBanner != null) _cachedPaymentBanner!,
 
             SizedBox(height: isUtility ? 16 : 32),
             OutlinedButton.icon(
@@ -136,127 +143,6 @@ class _PaymentPageState extends State<PaymentPage> {
             child: Text('OK', style: TextStyle(color: themeExt.primaryColor)),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildBillBreakdown(BuildContext context, AppThemeExtension themeExt) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        border: Border.all(color: themeExt.primaryColor, width: 1),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'BILL BREAKDOWN',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-              color: themeExt.primaryColor,
-              letterSpacing: 1.2,
-            ),
-          ),
-          const Divider(thickness: 1),
-          _buildBillItem('Previous Balance', '\$142.50'),
-          _buildBillItem('Current Usage (450kWh)', '\$67.50'),
-          _buildBillItem('Maintenance Fee', '\$12.00'),
-          _buildBillItem('Late Payment Fee', '\$5.00'),
-          const Divider(thickness: 1),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'TOTAL DUE',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '\$227.00',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: themeExt.primaryColor,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBillItem(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(fontSize: 13)),
-          Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPromoBanner(BuildContext context, AppThemeExtension themeExt) {
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeOutBack,
-      builder: (context, value, child) {
-        return Transform.scale(
-          scale: value,
-          child: Opacity(
-            opacity: value.clamp(0.0, 1.0),
-            child: child,
-          ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 24),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [themeExt.primaryColor, themeExt.accentColor],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(themeExt.borderRadius),
-          boxShadow: [
-            BoxShadow(
-              color: themeExt.primaryColor.withValues(alpha: 0.3),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: const Row(
-          children: [
-            Icon(Icons.stars, color: Colors.white, size: 32),
-            SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'RETAIL SPECIAL!',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Text(
-                    'Get 10% cashback on this purchase',
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
