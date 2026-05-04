@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:statsfl/statsfl.dart';
 
 import '../theme/app_theme_extension.dart';
 import '../widgets/security_scanner_animation.dart';
