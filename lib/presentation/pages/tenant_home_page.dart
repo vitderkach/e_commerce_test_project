@@ -1,5 +1,6 @@
 import 'package:e_commerce_test_project/core/di/app_dependencies.dart';
 import 'package:e_commerce_test_project/core/security/security_service.dart';
+import 'package:e_commerce_test_project/core/notification/notification_service.dart';
 import 'package:e_commerce_test_project/core/tenant/tenant_config.dart';
 import 'package:e_commerce_test_project/presentation/pages/payment_page.dart';
 import 'package:e_commerce_test_project/presentation/pages/security_scanner_page.dart';
@@ -17,7 +18,7 @@ class _TenantHomePageState extends State<TenantHomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      getIt<SecurityService>().requestNotificationPermission();
+      getIt<NotificationService>().requestNotificationPermission();
     });
   }
 

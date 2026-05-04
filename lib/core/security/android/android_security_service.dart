@@ -1,4 +1,6 @@
 import 'package:flutter/services.dart';
+import '../../di/injection.dart';
+import '../../logger/app_logger.dart';
 import '../security_service.dart';
 
 class AndroidSecurityService implements SecurityService {
@@ -9,7 +11,7 @@ class AndroidSecurityService implements SecurityService {
     try {
       return await _channel.invokeMethod<bool>('isRooted') ?? false;
     } on PlatformException catch (e) {
-      print('AndroidSecurityService: Error checking root status: ${e.message}');
+      getIt<AppLogger>().error('AndroidSecurityService: Error checking root status', e);
       return false;
     }
   }
@@ -19,7 +21,7 @@ class AndroidSecurityService implements SecurityService {
     try {
       return await _channel.invokeMethod<bool>('isScreenRecording') ?? false;
     } on PlatformException catch (e) {
-      print('AndroidSecurityService: Error checking screen recording status: ${e.message}');
+      getIt<AppLogger>().error('AndroidSecurityService: Error checking screen recording status', e);
       return false;
     }
   }
@@ -29,25 +31,7 @@ class AndroidSecurityService implements SecurityService {
     try {
       await _channel.invokeMethod('setSecureFlag', {'enable': enable});
     } on PlatformException catch (e) {
-      print('AndroidSecurityService: Error setting secure flag: ${e.message}');
-    }
-  }
-
-  @override
-  Future<void> startPayment() async {
-    try {
-      await _channel.invokeMethod('startPayment');
-    } on PlatformException catch (e) {
-      print('AndroidSecurityService: Error starting payment: ${e.message}');
-    }
-  }
-
-  @override
-  Future<void> requestNotificationPermission() async {
-    try {
-      await _channel.invokeMethod('requestNotificationPermission');
-    } on PlatformException catch (e) {
-      print('AndroidSecurityService: Error requesting notification permission: ${e.message}');
+      getIt<AppLogger>().error('AndroidSecurityService: Error setting secure flag', e);
     }
   }
 }

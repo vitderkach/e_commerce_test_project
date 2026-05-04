@@ -6,9 +6,7 @@ import 'core/tenant/tenant_config.dart';
 import 'core/di/app_dependencies.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   FlavorConfig.initialize(appFlavor);
-
   await AppDependencies.init();
 
   runApp(const MultiTenantApp());

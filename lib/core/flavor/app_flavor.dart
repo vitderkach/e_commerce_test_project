@@ -8,7 +8,7 @@ enum AppFlavor {
   static AppFlavor fromString(String? flavor) {
     return AppFlavor.values.firstWhere(
       (e) => e.name == flavor,
-      orElse: () => AppFlavor.retailShop, // Default flavor
+      orElse: () => AppFlavor.retailShop,
     );
   }
 }

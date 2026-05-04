@@ -17,14 +17,4 @@ class IOSSecurityService implements SecurityService {
   Future<void> setSecureFlag(bool enable) async {
     // TODO: Implement iOS side (e.g. prevent screen recording/screenshots if possible)
   }
-
-  @override
-  Future<void> startPayment() async {
-    // TODO: Implement iOS background task
-  }
-
-  @override
-  Future<void> requestNotificationPermission() async {
-    // TODO: Implement iOS notification permission request
-  }
 }

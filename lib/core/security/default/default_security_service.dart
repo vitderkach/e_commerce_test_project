@@ -9,10 +9,4 @@ class DefaultSecurityService implements SecurityService {
 
   @override
   Future<void> setSecureFlag(bool enable) async {}
-
-  @override
-  Future<void> startPayment() async {}
-
-  @override
-  Future<void> requestNotificationPermission() async {}
 }

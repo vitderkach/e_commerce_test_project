@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme_extension.dart';
+import '../../core/theme/base/pages/payment_page_theme_config.dart';
+import '../../core/theme/mixins/tenant_config_mixins.dart';
 import '../../core/di/app_dependencies.dart';
 import '../../core/security/security_service.dart';
-import '../../core/flavor/flavor_config.dart';
-import '../../core/flavor/app_flavor.dart';
+import '../../core/payment/payment_service.dart';
 import '../factories/payment_widget_factory.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -13,7 +14,7 @@ class PaymentPage extends StatefulWidget {
   State<PaymentPage> createState() => _PaymentPageState();
 }
 
-class _PaymentPageState extends State<PaymentPage> {
+class _PaymentPageState extends State<PaymentPage> with PageConfigMixin<PaymentPageThemeConfig> {
   Widget? _cachedPaymentBanner;
 
   @override
@@ -69,7 +70,6 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     final themeExt = Theme.of(context).extension<AppThemeExtension>()!;
-    final isUtility = FlavorConfig.instance.flavor == AppFlavor.utilityPay;
 
     return Scaffold(
       appBar: AppBar(
@@ -79,7 +79,7 @@ class _PaymentPageState extends State<PaymentPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(isUtility ? 16.0 : 24.0),
+          padding: pageConfig.padding,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -88,13 +88,13 @@ class _PaymentPageState extends State<PaymentPage> {
                 style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center,
               ),
-            SizedBox(height: isUtility ? 24 : 40),
+            SizedBox(height: pageConfig.topSpacing),
             if (_cachedPaymentBanner != null) _cachedPaymentBanner!,
 
-            SizedBox(height: isUtility ? 16 : 32),
+            SizedBox(height: pageConfig.bannerSpacing),
             OutlinedButton.icon(
               onPressed: () {
-                getIt<SecurityService>().startPayment();
+                getIt<PaymentService>().startPayment();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Processing payment in background... Check notifications.')),
                 );
@@ -137,8 +137,8 @@ class _PaymentPageState extends State<PaymentPage> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Close dialog
-              Navigator.of(context).pop(); // Go back to home
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
             },
             child: Text('OK', style: TextStyle(color: themeExt.primaryColor)),
           ),
