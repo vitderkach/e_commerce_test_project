@@ -12,19 +12,27 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
+import kotlinx.coroutines.*
 
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.example.e_commerce_test_project/security"
+    private val mainScope = CoroutineScope(Dispatchers.Main + Job())
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when (call.method) {
                 "isRooted" -> {
-                    result.success(isRooted())
+                    mainScope.launch {
+                        val isRooted = withContext(Dispatchers.IO) { isRooted() }
+                        result.success(isRooted)
+                    }
                 }
                 "isScreenRecording" -> {
-                    result.success(isScreenRecording(this))
+                    mainScope.launch {
+                        val isRecording = withContext(Dispatchers.IO) { isScreenRecording(this@MainActivity) }
+                        result.success(isRecording)
+                    }
                 }
                 "setSecureFlag" -> {
                     val enable = call.argument<Boolean>("enable") ?: false
@@ -44,6 +52,11 @@ class MainActivity : FlutterActivity() {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        mainScope.cancel()
+        super.onDestroy()
     }
 
     private fun requestNotificationPermission() {

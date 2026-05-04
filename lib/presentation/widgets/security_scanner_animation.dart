@@ -93,34 +93,47 @@ class RadarScannerPainter extends CustomPainter {
   RadarScannerPainter({required this.animationValue, required this.color})
     : super(repaint: animationValue);
 
+  Paint? _radarPaint;
+  Paint? _accentLinePaint;
+  Shader? _shader;
+  Size? _lastSize;
+
   @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
 
-    final sweepAngle = animationValue.value * 2 * math.pi;
-
-    final radarPaint = Paint()
-      ..style = PaintingStyle.fill
-      ..shader = SweepGradient(
+    if (_radarPaint == null || _accentLinePaint == null || _shader == null || _lastSize != size) {
+      _shader = SweepGradient(
         center: Alignment.center,
         startAngle: 0.0,
         endAngle: math.pi * 2,
         colors: [color.withValues(alpha: 0.0), color.withValues(alpha: 0.5)],
         stops: const [0.75, 1.0],
-        transform: GradientRotation(sweepAngle - math.pi / 2),
       ).createShader(Rect.fromCircle(center: center, radius: radius));
 
-    canvas.drawCircle(center, radius, radarPaint);
+      _radarPaint = Paint()
+        ..style = PaintingStyle.fill
+        ..shader = _shader;
 
-    final dx = center.dx + radius * math.cos(sweepAngle - math.pi / 2);
-    final dy = center.dy + radius * math.sin(sweepAngle - math.pi / 2);
+      _accentLinePaint = Paint()
+        ..color = color.withValues(alpha: 0.8)
+        ..strokeWidth = 2.0;
+      
+      _lastSize = size;
+    }
 
-    final accentLinePaint = Paint()
-      ..color = color.withValues(alpha: 0.8)
-      ..strokeWidth = 2.0;
+    final sweepAngle = animationValue.value * 2 * math.pi;
 
-    canvas.drawLine(center, Offset(dx, dy), accentLinePaint);
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(sweepAngle - math.pi / 2);
+    canvas.translate(-center.dx, -center.dy);
+
+    canvas.drawCircle(center, radius, _radarPaint!);
+    canvas.drawLine(center, Offset(center.dx + radius, center.dy), _accentLinePaint!);
+
+    canvas.restore();
   }
 
   @override
