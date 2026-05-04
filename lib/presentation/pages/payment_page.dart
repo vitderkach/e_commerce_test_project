@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../core/theme/app_theme_extension.dart';
-import '../../core/theme/base/pages/payment_page_theme_config.dart';
-import '../../core/theme/mixins/tenant_config_mixins.dart';
+import '../theme/app_theme_extension.dart';
+import '../theme/base/pages/payment_page_theme_config.dart';
+import '../theme/mixins/tenant_config_mixins.dart';
 import '../../core/di/app_dependencies.dart';
-import '../../core/security/security_service.dart';
-import '../../core/payment/payment_service.dart';
+import '../../domain/services/security_service.dart';
+import '../../domain/services/payment_service.dart';
 import '../factories/payment_widget_factory.dart';
 
 class PaymentPage extends StatefulWidget {

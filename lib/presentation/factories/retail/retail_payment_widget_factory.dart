@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../payment_widget_factory.dart';
-import '../../../core/theme/app_theme_extension.dart';
+import '../../theme/app_theme_extension.dart';
 
 class RetailPaymentWidgetFactory implements PaymentWidgetFactory {
   @override
