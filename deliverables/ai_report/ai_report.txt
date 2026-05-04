@@ -1,0 +1,7 @@
+When utilizing AI, if a solution was suboptimal, I either refined the
+instructions to achieve a better result or, when AI was unable to
+provide a satisfactory answer, I turned to other resources like Medium,
+Stack Overflow, and official documentation.
+
+One such challenge was detecting whether the device was rooted or
+determining if the screen was being recorded.
