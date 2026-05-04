@@ -18,7 +18,7 @@ class SecurityScannerPage extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: Center(
-        child: StatsFl(child: SecurityScanner(color: themeExt.primaryColor)),
+        child: SecurityScanner(color: themeExt.primaryColor),
       ),
     );
   }
