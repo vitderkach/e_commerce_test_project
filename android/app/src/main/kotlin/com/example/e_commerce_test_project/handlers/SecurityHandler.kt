@@ -48,6 +48,7 @@ class SecurityHandler(private val activity: Activity) : MethodChannel.MethodCall
         }
     }
 
+    // Reference for root detection: https://medium.com/@maliksaif070/how-to-detect-rooted-devices-in-android-without-play-integrity-53268b8a9dd2
     private fun isRooted(): Boolean {
         return (checkRootedFiles() || checkRootedProcesses() || checkTagsAndKeys())
     }
@@ -88,6 +89,9 @@ class SecurityHandler(private val activity: Activity) : MethodChannel.MethodCall
         return buildTags != null && buildTags.contains("test-keys")
     }
 
+    // There is no single universal solution for detecting screen recording.
+    // For more details, see: https://medium.com/@snishanthdeveloper/android-16s-enhanced-screen-recording-detection-what-developers-need-to-know-23bf255920e2
+    // Alternative solution: https://medium.com/@talsec/how-to-detect-screen-capture-recording-using-kotlin-ec1801501cb6
     private fun isScreenRecording(): Boolean {
         val displayManager = activity.getSystemService(Context.DISPLAY_SERVICE) as? DisplayManager
         if (displayManager != null) {
