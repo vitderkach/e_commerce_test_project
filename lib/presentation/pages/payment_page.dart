@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:statsfl/statsfl.dart';
 import '../../core/theme/app_theme_extension.dart';
 import '../../core/di/injection.dart';
 import '../../core/security/security_service.dart';
-import '../widgets/security_scanner_animation.dart';
+import '../../core/flavor/flavor_config.dart';
+import '../../core/flavor/app_flavor.dart';
 
 class PaymentPage extends StatefulWidget {
   const PaymentPage({super.key});
@@ -59,6 +59,7 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     final themeExt = Theme.of(context).extension<AppThemeExtension>()!;
+    final isUtility = FlavorConfig.instance.flavor == AppFlavor.utilityPay;
 
     return Scaffold(
       appBar: AppBar(
@@ -68,7 +69,7 @@ class _PaymentPageState extends State<PaymentPage> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: EdgeInsets.all(isUtility ? 16.0 : 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -77,21 +78,13 @@ class _PaymentPageState extends State<PaymentPage> {
                 style: Theme.of(context).textTheme.headlineSmall,
                 textAlign: TextAlign.center,
               ),
-            const SizedBox(height: 40),
-            _buildPaymentMethod(
-              context,
-              icon: Icons.credit_card,
-              label: 'Credit Card',
-              themeExt: themeExt,
-            ),
-            const SizedBox(height: 16),
-            _buildPaymentMethod(
-              context,
-              icon: Icons.account_balance,
-              label: 'Bank Transfer',
-              themeExt: themeExt,
-            ),
-            const SizedBox(height: 32),
+            SizedBox(height: isUtility ? 24 : 40),
+              if (FlavorConfig.instance.flavor == AppFlavor.retailShop)
+                _buildPromoBanner(context, themeExt),
+              if (isUtility)
+                _buildBillBreakdown(context, themeExt),
+
+            SizedBox(height: isUtility ? 16 : 32),
             OutlinedButton.icon(
               onPressed: () {
                 getIt<SecurityService>().startPayment();
@@ -128,33 +121,6 @@ class _PaymentPageState extends State<PaymentPage> {
     ),);
   }
 
-  Widget _buildPaymentMethod(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required AppThemeExtension themeExt,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(themeExt.borderRadius),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: themeExt.primaryColor, size: 32),
-          const SizedBox(width: 16),
-          Text(
-            label,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
-          const Spacer(),
-          const Icon(Icons.radio_button_off, color: Colors.grey),
-        ],
-      ),
-    );
-  }
-
   void _processPayment(BuildContext context, AppThemeExtension themeExt) {
     showDialog(
       context: context,
@@ -170,6 +136,127 @@ class _PaymentPageState extends State<PaymentPage> {
             child: Text('OK', style: TextStyle(color: themeExt.primaryColor)),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBillBreakdown(BuildContext context, AppThemeExtension themeExt) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade100,
+        border: Border.all(color: themeExt.primaryColor, width: 1),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'BILL BREAKDOWN',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+              color: themeExt.primaryColor,
+              letterSpacing: 1.2,
+            ),
+          ),
+          const Divider(thickness: 1),
+          _buildBillItem('Previous Balance', '\$142.50'),
+          _buildBillItem('Current Usage (450kWh)', '\$67.50'),
+          _buildBillItem('Maintenance Fee', '\$12.00'),
+          _buildBillItem('Late Payment Fee', '\$5.00'),
+          const Divider(thickness: 1),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'TOTAL DUE',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '\$227.00',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: themeExt.primaryColor,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBillItem(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(fontSize: 13)),
+          Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPromoBanner(BuildContext context, AppThemeExtension themeExt) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0.0, end: 1.0),
+      duration: const Duration(milliseconds: 800),
+      curve: Curves.easeOutBack,
+      builder: (context, value, child) {
+        return Transform.scale(
+          scale: value,
+          child: Opacity(
+            opacity: value.clamp(0.0, 1.0),
+            child: child,
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 24),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [themeExt.primaryColor, themeExt.accentColor],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(themeExt.borderRadius),
+          boxShadow: [
+            BoxShadow(
+              color: themeExt.primaryColor.withValues(alpha: 0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: const Row(
+          children: [
+            Icon(Icons.stars, color: Colors.white, size: 32),
+            SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'RETAIL SPECIAL!',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  Text(
+                    'Get 10% cashback on this purchase',
+                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -10,15 +10,35 @@ class UtilityPayTenant implements TenantConfig {
   ThemeData get themeData => ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          primary: Colors.blue,
+          seedColor: const Color(0xFF1A237E), // Navy 900
+          primary: const Color(0xFF1A237E),
+          secondary: const Color(0xFF455A64), // Slate
         ),
         extensions: [
           const AppThemeExtension(
-            primaryColor: Colors.blue,
-            accentColor: Colors.lightBlueAccent,
-            borderRadius: 4.0,
+            primaryColor: Color(0xFF1A237E),
+            accentColor: Color(0xFF455A64),
+            borderRadius: 0.0, // Sharp edges
           ),
         ],
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          ),
+        ),
+        cardTheme: const CardThemeData(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+          ),
+        ),
       );
 }
