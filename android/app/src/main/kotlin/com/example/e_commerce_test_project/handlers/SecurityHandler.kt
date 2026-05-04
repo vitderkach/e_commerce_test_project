@@ -1,4 +1,4 @@
-package com.example.e_commerce_test_project
+package com.example.e_commerce_test_project.handlers
 
 import android.app.Activity
 import android.content.Context

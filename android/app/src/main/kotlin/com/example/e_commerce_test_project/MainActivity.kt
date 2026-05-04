@@ -1,5 +1,8 @@
 package com.example.e_commerce_test_project
 
+import com.example.e_commerce_test_project.handlers.NotificationHandler
+import com.example.e_commerce_test_project.handlers.PaymentHandler
+import com.example.e_commerce_test_project.handlers.SecurityHandler
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel

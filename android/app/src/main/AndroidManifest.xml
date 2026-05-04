@@ -9,7 +9,7 @@
         android:icon="@mipmap/ic_launcher">
 
         <service
-            android:name=".PaymentService"
+            android:name=".services.PaymentService"
             android:foregroundServiceType="specialUse"
             android:exported="false">
             <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"

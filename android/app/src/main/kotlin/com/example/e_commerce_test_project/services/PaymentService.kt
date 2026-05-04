@@ -1,4 +1,4 @@
-package com.example.e_commerce_test_project
+package com.example.e_commerce_test_project.services
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -65,6 +65,11 @@ class PaymentService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? = null
 
+    override fun onDestroy() {
+        serviceScope.cancel()
+        super.onDestroy()
+    }
+
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = "Payment Processing Channel"
@@ -73,10 +78,5 @@ class PaymentService : Service() {
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(channel)
         }
-    }
-
-    override fun onDestroy() {
-        serviceScope.cancel()
-        super.onDestroy()
     }
 }
