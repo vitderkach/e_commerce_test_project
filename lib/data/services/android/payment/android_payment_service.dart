@@ -4,7 +4,7 @@ import '../../../../core/logger/app_logger.dart';
 import '../../../../domain/services/payment_service.dart';
 
 class AndroidPaymentService implements PaymentService {
-  static const _channel = MethodChannel('com.example.e_commerce_test_project/security');
+  static const _channel = MethodChannel('com.example.e_commerce_test_project/payments');
 
   @override
   Future<void> startPayment() async {

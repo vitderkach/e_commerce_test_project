@@ -5,7 +5,7 @@ import '../../../../core/logger/app_logger.dart';
 import '../../../../domain/services/notification_service.dart';
 
 class AndroidNotificationService implements NotificationService {
-  static const _channel = MethodChannel('com.example.e_commerce_test_project/security');
+  static const _channel = MethodChannel('com.example.e_commerce_test_project/notifications');
 
   final _onPaymentFinishedController = StreamController<void>.broadcast();
 
