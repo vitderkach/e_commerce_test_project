@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../tenant_config.dart';
 import '../../theme/app_theme_extension.dart';
 
-class RetailShopTenant implements TenantConfig {
+class RetailShopTenant implements TenantConfigData {
   @override
   String get tenantName => 'Retail Shop';
 

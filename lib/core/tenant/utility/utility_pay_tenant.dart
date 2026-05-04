@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../tenant_config.dart';
 import '../../theme/app_theme_extension.dart';
 
-class UtilityPayTenant implements TenantConfig {
+class UtilityPayTenant implements TenantConfigData {
   @override
   String get tenantName => 'Utility Pay';
 
