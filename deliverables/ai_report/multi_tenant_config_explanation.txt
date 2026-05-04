@@ -1,0 +1,25 @@
+Multi-Tenant Configuration Structure Explanation
+
+The project uses a structured multi-tenant approach leveraging Flutter Flavors and Dependency Injection (DI) to separate tenant-specific logic, themes, and UI components.
+
+1. Android Flavors (Native Level):
+The project defines two product flavors in `android/app/build.gradle.kts`:
+- `retail_shop`: Targeted for the retail business tenant.
+- `utility_pay`: Targeted for the utility services tenant.
+Each flavor has its own `applicationIdSuffix`, `versionNameSuffix`, and `manifestPlaceholders` (like `appName`), allowing for separate builds and installations on the same device.
+
+2. Flavor Identification (Dart Level):
+- The `AppFlavor` enum (in `lib/data/models/flavor/app_flavor.dart`) maps the native flavor strings to Dart-friendly types.
+- `FlavorConfig` (singleton) is used to capture the flavor passed during the build process (`--flavor`).
+
+3. Dependency Injection (DI) for Tenancy:
+The `TenantModule` in `lib/core/di/app_dependencies.dart` acts as the orchestrator for tenant-specific configurations:
+- It checks the current `AppFlavor`.
+- Based on the flavor, it registers different implementations of core interfaces into `GetIt`.
+
+4. Tenant-Specific Components:
+- Themes: `RetailThemeConfig` vs `UtilityThemeConfig`. Both implement a common `PageThemeConfig` interface but provide different colors, styles, and sub-page configurations.
+- Factories: `RetailPaymentWidgetFactory` vs `UtilityPaymentWidgetFactory`. These factories allow the app to inject different payment UI components (like a `PaymentMethodSelector`) depending on the tenant, while keeping the main page code generic.
+
+Summary:
+This architecture allows the core business logic and main page structures to remain "tenant-agnostic," while all variations in branding, styling, and specific feature implementations are handled via the DI layer based on the build flavor.
