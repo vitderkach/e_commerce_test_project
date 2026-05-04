@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme_extension.dart';
-import '../../core/di/injection.dart';
+import '../../core/di/app_dependencies.dart';
 import '../../core/security/security_service.dart';
 import '../../core/flavor/flavor_config.dart';
 import '../../core/flavor/app_flavor.dart';

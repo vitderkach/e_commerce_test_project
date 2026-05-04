@@ -1,4 +1,4 @@
-import 'package:e_commerce_test_project/core/di/injection.dart';
+import 'package:e_commerce_test_project/core/di/app_dependencies.dart';
 import 'package:e_commerce_test_project/core/security/security_service.dart';
 import 'package:e_commerce_test_project/core/tenant/tenant_config.dart';
 import 'package:e_commerce_test_project/presentation/pages/payment_page.dart';

@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'core/flavor/flavor_config.dart';
 import 'core/tenant/tenant_config.dart';
-import 'core/di/injection.dart';
+import 'core/di/app_dependencies.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   FlavorConfig.initialize(appFlavor);
 
-  await Injection.init();
+  await AppDependencies.init();
 
   runApp(const MultiTenantApp());
 }

@@ -13,7 +13,7 @@ import '../../presentation/factories/utility/utility_payment_widget_factory.dart
 
 final getIt = GetIt.instance;
 
-class Injection {
+class AppDependencies {
   static Future<void> init() async {
     // Platform Service
     getIt.registerLazySingleton<PlatformService>(() => PlatformServiceImpl());
