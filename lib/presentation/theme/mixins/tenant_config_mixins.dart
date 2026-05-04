@@ -1,4 +1,4 @@
-import '../../../core/di/injection.dart';
+import '../../../core/di/di.dart';
 import '../../../domain/theme/page_theme_config.dart';
 
 mixin PageConfigMixin<T> {

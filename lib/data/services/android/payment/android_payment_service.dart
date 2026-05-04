@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import '../../../../core/di/injection.dart';
+import '../../../../core/di/di.dart';
 import '../../../../core/logger/app_logger.dart';
 import '../../../../domain/services/payment_service.dart';
 

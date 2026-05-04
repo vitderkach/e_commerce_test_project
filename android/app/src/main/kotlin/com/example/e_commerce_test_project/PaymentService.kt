@@ -51,10 +51,8 @@ class PaymentService : Service() {
 
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.notify(notificationId, finalNotification)
-            
-            delay(3000)
-            // Use legacy stopForeground for compatibility or explicit true
-            stopForeground(true)
+
+            stopForeground(false)
             stopSelf()
         }
 

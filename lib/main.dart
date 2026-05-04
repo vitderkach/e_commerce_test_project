@@ -2,7 +2,7 @@ import 'package:e_commerce_test_project/presentation/pages/tenant_home_page.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'data/services/default/flavor/flavor_config.dart';
-import 'presentation/widgets/tenant_config.dart';
+import 'presentation/providers/tenant_config.dart';
 import 'core/di/app_dependencies.dart';
 
 void main() async {

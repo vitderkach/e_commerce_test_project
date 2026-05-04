@@ -32,12 +32,6 @@ class _PaymentPageState extends State<PaymentPage> with PageConfigMixin<PaymentP
     }
   }
 
-  @override
-  void dispose() {
-    getIt<SecurityService>().setSecureFlag(false);
-    super.dispose();
-  }
-
   Future<void> _checkSecurityAndPay(BuildContext context, AppThemeExtension themeExt) async {
     final securityService = getIt<SecurityService>();
     
@@ -145,5 +139,11 @@ class _PaymentPageState extends State<PaymentPage> with PageConfigMixin<PaymentP
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    getIt<SecurityService>().setSecureFlag(false);
+    super.dispose();
   }
 }

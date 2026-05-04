@@ -9,4 +9,7 @@ class NullSecurityService implements SecurityService {
 
   @override
   Future<void> setSecureFlag(bool enable) async {}
+
+  @override
+  Stream<Map<String, dynamic>> get securityEvents => Stream.fromIterable([]);
 }

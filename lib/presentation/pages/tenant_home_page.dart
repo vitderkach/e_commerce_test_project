@@ -1,7 +1,6 @@
 import 'package:e_commerce_test_project/core/di/app_dependencies.dart';
-import 'package:e_commerce_test_project/domain/services/security_service.dart';
 import 'package:e_commerce_test_project/domain/services/notification_service.dart';
-import 'package:e_commerce_test_project/presentation/widgets/tenant_config.dart';
+import 'package:e_commerce_test_project/presentation/providers/tenant_config.dart';
 import 'package:e_commerce_test_project/presentation/pages/payment_page.dart';
 import 'package:e_commerce_test_project/presentation/pages/security_scanner_page.dart';
 import 'package:flutter/material.dart';
