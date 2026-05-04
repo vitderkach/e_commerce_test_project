@@ -28,6 +28,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["appName"] = "E-Commerce App"
     }
 
     flavorDimensions += "mode"
@@ -36,11 +37,13 @@ android {
             dimension = "mode"
             applicationIdSuffix = ".retail"
             versionNameSuffix = "-retail"
+            manifestPlaceholders["appName"] = "Retail Shop"
         }
         create("utility_pay") {
             dimension = "mode"
             applicationIdSuffix = ".utility"
             versionNameSuffix = "-utility"
+            manifestPlaceholders["appName"] = "Utility Pay"
         }
     }
 
