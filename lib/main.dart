@@ -1,3 +1,4 @@
+import 'package:e_commerce_test_project/presentation/pages/security_scanner_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'core/flavor/flavor_config.dart';
@@ -70,6 +71,19 @@ class TenantHomePage extends StatelessWidget {
               },
               icon: const Icon(Icons.payment),
               label: const Text('Go to Payment'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              ),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const SecurityScannerPage()),
+                );
+              },
+              icon: const Icon(Icons.payment),
+              label: const Text('Go to Animation'),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               ),

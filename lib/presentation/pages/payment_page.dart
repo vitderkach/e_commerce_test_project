@@ -33,7 +33,7 @@ class _PaymentPageState extends State<PaymentPage> {
     final isRooted = await securityService.isRooted();
     final isRecording = await securityService.isScreenRecording();
 
-    if (!mounted) return;
+    if (!context.mounted) return;
 
     if (isRooted || isRecording) {
       String reason = isRooted ? "Device is rooted" : "Screen recording detected";
@@ -91,12 +91,6 @@ class _PaymentPageState extends State<PaymentPage> {
               label: 'Bank Transfer',
               themeExt: themeExt,
             ),
-            const SizedBox(height: 32),
-            StatsFl(child:
-            SecurityScanner(
-              //color: themeExt.primaryColor,
-              //size: 150,
-            ),),
             const SizedBox(height: 32),
             OutlinedButton.icon(
               onPressed: () {
