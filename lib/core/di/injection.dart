@@ -1,6 +1,10 @@
 import 'package:get_it/get_it.dart';
 import '../platform/platform_service.dart';
+import '../platform/default/platform_service_impl.dart';
 import '../security/security_service.dart';
+import '../security/android/android_security_service.dart';
+import '../security/ios/ios_security_service.dart';
+import '../security/default/default_security_service.dart';
 import '../flavor/flavor_config.dart';
 import '../flavor/app_flavor.dart';
 import '../../presentation/factories/payment_widget_factory.dart';
