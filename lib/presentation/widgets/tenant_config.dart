@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/models/flavor/app_flavor.dart';
-import '../../data/models/tenant/retail_shop_tenant.dart';
-import '../../data/models/tenant/utility_pay_tenant.dart';
+import '../../data/models/tenants/retail_shop_tenant.dart';
+import '../../data/models/tenants/utility_pay_tenant.dart';
 import '../../domain/models/tenant_config_data.dart';
 
 class TenantConfig extends InheritedWidget {
