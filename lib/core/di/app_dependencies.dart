@@ -23,6 +23,7 @@ import '../../presentation/theme/tenants/utility/utility_theme_config.dart';
 import '../../presentation/factories/payment_widget_factory.dart';
 import '../../presentation/factories/tenants/retail/retail_payment_widget_factory.dart';
 import '../../presentation/factories/tenants/utility/utility_payment_widget_factory.dart';
+import '../../presentation/cubits/payment_cubit.dart';
 
 class AppDependencies {
   static Future<void> init() async {
@@ -32,6 +33,11 @@ class AppDependencies {
     PlatformModule.register(getIt<PlatformService>());
 
     TenantModule.register();
+
+    getIt.registerFactory<PaymentCubit>(() => PaymentCubit(
+          securityService: getIt<SecurityService>(),
+          paymentService: getIt<PaymentService>(),
+        ));
   }
 }
 
