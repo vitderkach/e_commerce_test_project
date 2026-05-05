@@ -1,3 +1,4 @@
+import 'package:e_commerce_test_project/presentation/factories/tenants/utility/widgets/bill_item.dart';
 import 'package:flutter/material.dart';
 import '../../payment_widget_factory.dart';
 import '../../../theme/app_theme_extension.dart';
@@ -29,10 +30,10 @@ class UtilityPaymentWidgetFactory implements PaymentWidgetFactory {
             ),
           ),
           const Divider(thickness: 1),
-          _buildBillItem('Previous Balance', '\$142.50'),
-          _buildBillItem('Current Usage (450kWh)', '\$67.50'),
-          _buildBillItem('Maintenance Fee', '\$12.00'),
-          _buildBillItem('Late Payment Fee', '\$5.00'),
+          BillItem(label:  'Previous Balance', value: '\$142.50'),
+          BillItem(label:  'Current Usage (450kWh)', value: '\$67.50'),
+          BillItem(label: 'Maintenance Fee', value: '\$12.00'),
+          BillItem(label: 'Late Payment Fee', value: '\$5.00'),
           const Divider(thickness: 1),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -50,19 +51,6 @@ class UtilityPaymentWidgetFactory implements PaymentWidgetFactory {
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBillItem(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: const TextStyle(fontSize: 13)),
-          Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500)),
         ],
       ),
     );

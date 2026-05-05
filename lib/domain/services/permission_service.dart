@@ -1,3 +1,3 @@
-abstract class NotificationService {
+abstract class PermissionService {
   Future<void> requestNotificationPermission();
 }

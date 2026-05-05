@@ -7,7 +7,7 @@ import android.os.Build
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-class NotificationHandler(private val activity: Activity) : MethodChannel.MethodCallHandler {
+class PermissionHandler(private val activity: Activity) : MethodChannel.MethodCallHandler {
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         if (call.method == "requestNotificationPermission") {
             requestNotificationPermission()

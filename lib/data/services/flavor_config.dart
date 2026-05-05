@@ -1,4 +1,4 @@
-import '../../../models/flavor/app_flavor.dart';
+import '../models/flavor/app_flavor.dart';
 
 class FlavorConfig {
   final AppFlavor flavor;

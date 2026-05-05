@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
-import '../../../../core/di/di.dart';
-import '../../../../core/logger/app_logger.dart';
-import '../../../../domain/services/payment_service.dart';
+import '../../../../../core/di/di.dart';
+import '../../../../../core/logger/app_logger.dart';
+import '../../../../../domain/services/payment_service.dart';
 
 class AndroidPaymentService implements PaymentService {
   static const _channel = MethodChannel('com.example.e_commerce_test_project/payments');

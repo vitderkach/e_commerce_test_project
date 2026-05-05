@@ -1,6 +1,6 @@
-import '../../../../domain/services/notification_service.dart';
+import '../../../../../domain/services/permission_service.dart';
 
-class IOSNotificationService implements NotificationService {
+class IOSPermissionService implements PermissionService {
   @override
   Future<void> requestNotificationPermission() async {
     // TODO: Implement iOS notification permission request

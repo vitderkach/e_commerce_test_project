@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 class SecurityScanner extends StatefulWidget {
   final Color color;
   final double dimensionLength;
+  final int durationInSec;
 
   const SecurityScanner({
     super.key,
     this.color = Colors.green,
     this.dimensionLength = 300,
+    this.durationInSec = 3,
   });
 
   @override
@@ -24,7 +26,7 @@ class _SecurityScannerState extends State<SecurityScanner>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: Duration(seconds: widget.durationInSec),
     )..repeat();
   }
 
@@ -38,12 +40,12 @@ class _SecurityScannerState extends State<SecurityScanner>
         children: [
           CustomPaint(
             size: size,
-            painter: StaticGridPainter(color: widget.color),
+            painter: _StaticGridPainter(color: widget.color),
           ),
           RepaintBoundary(
             child: CustomPaint(
               size: size,
-              painter: RadarScannerPainter(
+              painter: _RadarScannerPainter(
                 animationValue: _controller,
                 color: widget.color,
               ),
@@ -61,10 +63,10 @@ class _SecurityScannerState extends State<SecurityScanner>
   }
 }
 
-class StaticGridPainter extends CustomPainter {
+class _StaticGridPainter extends CustomPainter {
   final Color color;
 
-  const StaticGridPainter({required this.color});
+  const _StaticGridPainter({required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -82,15 +84,15 @@ class StaticGridPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(StaticGridPainter oldDelegate) =>
+  bool shouldRepaint(_StaticGridPainter oldDelegate) =>
       oldDelegate.color != color;
 }
 
-class RadarScannerPainter extends CustomPainter {
+class _RadarScannerPainter extends CustomPainter {
   final Animation<double> animationValue;
   final Color color;
 
-  RadarScannerPainter({required this.animationValue, required this.color})
+  _RadarScannerPainter({required this.animationValue, required this.color})
     : super(repaint: animationValue);
 
   Paint? _radarPaint;
@@ -137,7 +139,7 @@ class RadarScannerPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(RadarScannerPainter oldDelegate) =>
+  bool shouldRepaint(_RadarScannerPainter oldDelegate) =>
       oldDelegate.color != color ||
       oldDelegate.animationValue != animationValue;
 }

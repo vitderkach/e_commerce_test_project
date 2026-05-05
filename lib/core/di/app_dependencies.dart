@@ -1,21 +1,21 @@
 export 'di.dart';
-import '../../data/services/default/flavor/flavor_config.dart';
-import '../../data/services/default/notification/null_notification_service.dart';
-import '../../data/services/default/payment/null_payment_service.dart';
-import '../../data/services/default/platform/platform_service_impl.dart';
-import '../../data/services/default/security/null_security_service.dart';
+import '../../data/services/flavor_config.dart';
+import '../../data/services/platforms/android/payment/android_payment_service.dart';
+import '../../data/services/platforms/android/permission/android_permission_service.dart';
+import '../../data/services/platforms/android/security/android_security_service.dart';
+import '../../data/services/platforms/default/payment/null_payment_service.dart';
+import '../../data/services/platforms/default/permission/null_permission_service.dart';
+import '../../data/services/platforms/default/platform/platform_service_impl.dart';
+import '../../data/services/platforms/default/security/null_security_service.dart';
+import '../../data/services/platforms/ios/payment/ios_payment_service.dart';
+import '../../data/services/platforms/ios/permission/ios_permission_service.dart';
+import '../../data/services/platforms/ios/security/ios_security_service.dart';
 import 'di.dart';
 import '../../domain/services/platform_service.dart';
 import '../logger/app_logger.dart';
 import '../../domain/services/security_service.dart';
-import '../../data/services/android/security/android_security_service.dart';
-import '../../data/services/ios/security/ios_security_service.dart';
 import '../../domain/services/payment_service.dart';
-import '../../data/services/android/payment/android_payment_service.dart';
-import '../../data/services/ios/payment/ios_payment_service.dart';
-import '../../domain/services/notification_service.dart';
-import '../../data/services/android/notification/android_notification_service.dart';
-import '../../data/services/ios/notification/ios_notification_service.dart';
+import '../../domain/services/permission_service.dart';
 import '../../data/models/flavor/app_flavor.dart';
 import '../../domain/theme/page_theme_config.dart';
 import '../../presentation/theme/tenants/retail/retail_theme_config.dart';
@@ -44,14 +44,14 @@ class PlatformModule {
       getIt.registerLazySingleton<PaymentService>(
         () => AndroidPaymentService(),
       );
-      getIt.registerLazySingleton<NotificationService>(
-        () => AndroidNotificationService(),
+      getIt.registerLazySingleton<PermissionService>(
+        () => AndroidPermissionService(),
       );
     } else if (platformService.isIOS) {
       getIt.registerLazySingleton<SecurityService>(() => IOSSecurityService());
       getIt.registerLazySingleton<PaymentService>(() => IOSPaymentService());
-      getIt.registerLazySingleton<NotificationService>(
-        () => IOSNotificationService(),
+      getIt.registerLazySingleton<PermissionService>(
+        () => IOSPermissionService(),
       );
     } else {
       getIt.registerLazySingleton<SecurityService>(
@@ -60,8 +60,8 @@ class PlatformModule {
       getIt.registerLazySingleton<PaymentService>(
         () => NullPaymentService(),
       );
-      getIt.registerLazySingleton<NotificationService>(
-        () => NullNotificationService(),
+      getIt.registerLazySingleton<PermissionService>(
+        () => NullPermissionService(),
       );
     }
   }

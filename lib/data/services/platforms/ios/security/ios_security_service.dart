@@ -1,4 +1,4 @@
-import '../../../../domain/services/security_service.dart';
+import '../../../../../domain/services/security_service.dart';
 
 class IOSSecurityService implements SecurityService {
   @override

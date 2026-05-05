@@ -32,6 +32,7 @@ class _PaymentPageState extends State<PaymentPage> with PageConfigMixin<PaymentP
     }
   }
 
+  // It would be better to call from state management (e.g. Provider/BLoC)
   Future<void> _checkSecurityAndPay(BuildContext context, AppThemeExtension themeExt) async {
     final securityService = getIt<SecurityService>();
     
