@@ -22,7 +22,7 @@ class PaymentCubit extends Cubit<PaymentState> {
     final isRecording = await _securityService.isScreenRecording();
 
     if (isRooted || isRecording) {
-      String reason = isRooted ? "Device is rooted" : "Screen recording detected";
+      String reason = isRooted ? "Device is rooted" : "Screen recording or root detected";
       emit(PaymentSecurityBlocked(reason));
       return;
     }

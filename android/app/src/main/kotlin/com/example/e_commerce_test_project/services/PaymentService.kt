@@ -26,6 +26,7 @@ class PaymentService : Service() {
             .setContentText("Please wait while we process your request...")
             .setSmallIcon(android.R.drawable.ic_menu_save)
             .setOngoing(true)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .setOnlyAlertOnce(true)
             .setProgress(100, 0, false)
 

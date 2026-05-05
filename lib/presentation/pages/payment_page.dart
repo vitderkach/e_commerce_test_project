@@ -113,7 +113,7 @@ class _PaymentPageState extends State<PaymentPage> with PageConfigMixin<PaymentP
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Security Alert'),
-        content: Text('Payment blocked: $reason. For your security, payments are disabled on compromised devices or during screen sharing.'),
+        content: Text('Payment blocked: $reason. For your security, payments are disabled.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
